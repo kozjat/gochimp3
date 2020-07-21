@@ -3,8 +3,8 @@ package gochimp3
 import "fmt"
 
 const (
-	webhooks_path       = "/lists/%s/webhooks"
-	single_webhook_path = webhooks_path + "/%s"
+	webhooksPath = "/lists/%s/webhooks"
+	webhookPath  = webhooksPath + "/%s"
 )
 
 type ListOfWebHooks struct {
@@ -46,7 +46,7 @@ func (list ListResponse) CreateWebHooks(body *WebHookRequest) (*WebHook, error) 
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(webhooks_path, list.ID)
+	endpoint := fmt.Sprintf(webhooksPath, list.ID)
 	response := new(WebHook)
 
 	return response, list.api.Request("POST", endpoint, nil, &body, response)
@@ -57,7 +57,7 @@ func (list ListResponse) UpdateWebHook(id string, body *WebHookRequest) (*WebHoo
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_webhook_path, list.ID, id)
+	endpoint := fmt.Sprintf(webhookPath, list.ID, id)
 	response := new(WebHook)
 
 	return response, list.api.Request("PATCH", endpoint, nil, &body, response)
@@ -70,7 +70,7 @@ func (list ListResponse) GetWebHooks() (*ListOfWebHooks, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(webhooks_path, list.ID)
+	endpoint := fmt.Sprintf(webhooksPath, list.ID)
 	response := new(ListOfWebHooks)
 
 	return response, list.api.Request("GET", endpoint, nil, nil, response)
@@ -81,7 +81,7 @@ func (list ListResponse) GetWebHook(id string) (*WebHook, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_webhook_path, list.ID, id)
+	endpoint := fmt.Sprintf(webhookPath, list.ID, id)
 	response := new(WebHook)
 
 	return response, list.api.Request("GET", endpoint, nil, nil, response)
@@ -92,6 +92,6 @@ func (list ListResponse) DeleteWebHook(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(single_webhook_path, list.ID, id)
+	endpoint := fmt.Sprintf(webhookPath, list.ID, id)
 	return list.api.RequestOk("DELETE", endpoint)
 }
