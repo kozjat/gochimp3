@@ -1,0 +1,13 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+
+steps:
+  - uses: actions/checkout@master
+  - uses: actions/setup-go@v1
+    name: 'Build'
+    with:
+      go-version: '1.14.3'
+  - run: go build .

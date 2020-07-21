@@ -7,23 +7,23 @@ import (
 )
 
 const (
-	store_path  = "/ecommerce/stores/%s"
-	stores_path = "/ecommerce/stores"
+	storePath  = "/ecommerce/stores/%s"
+	storesPath = "/ecommerce/stores"
 
-	customer_path  = "/ecommerce/stores/%s/customers/%s"
-	customers_path = "/ecommerce/stores/%s/customers"
+	customerPath  = "/ecommerce/stores/%s/customers/%s"
+	customersPath = "/ecommerce/stores/%s/customers"
 
-	cart_path  = "/ecommerce/stores/%s/carts/%s"
-	carts_path = "/ecommerce/stores/%s/carts"
+	cartPath  = "/ecommerce/stores/%s/carts/%s"
+	cartsPath = "/ecommerce/stores/%s/carts"
 
-	order_path  = "/ecommerce/stores/%s/orders/%s"
-	orders_path = "/ecommerce/stores/%s/orders"
+	orderPath  = "/ecommerce/stores/%s/orders/%s"
+	ordersPath = "/ecommerce/stores/%s/orders"
 
-	product_path  = "/ecommerce/stores/%s/products/%s"
-	products_path = "/ecommerce/stores/%s/products"
+	productPath  = "/ecommerce/stores/%s/products/%s"
+	productsPath = "/ecommerce/stores/%s/products"
 
-	variant_path  = "/ecommerce/stores/%s/products/%s/variants/%s"
-	variants_path = "/ecommerce/stores/%s/products/%s/variants"
+	variantPath  = "/ecommerce/stores/%s/products/%s/variants/%s"
+	variantsPath = "/ecommerce/stores/%s/products/%s/variants"
 )
 
 // ------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ func validID(id string) error {
 
 func (store Store) HasID() error {
 	if store.ID == "" {
-		return errors.New("No ID provided on store")
+		return errors.New("no id provided on store")
 	}
 
 	return nil
@@ -83,7 +83,7 @@ type StoreList struct {
 
 func (api API) GetStores(params *ExtendedQueryParams) (*StoreList, error) {
 	response := new(StoreList)
-	err := api.Request("GET", stores_path, params, nil, response)
+	err := api.Request("GET", storesPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (api API) GetStore(id string, params QueryParams) (*Store, error) {
 	res := new(Store)
 	res.api = &api
 
-	endpoint := fmt.Sprintf(store_path, id)
+	endpoint := fmt.Sprintf(storePath, id)
 	err := api.Request("GET", endpoint, params, nil, res)
 	if err != nil {
 		return nil, err
@@ -112,14 +112,14 @@ func (api API) CreateStore(req *Store) (*Store, error) {
 	res := new(Store)
 	res.api = &api
 
-	return res, api.Request("POST", stores_path, nil, req, res)
+	return res, api.Request("POST", storesPath, nil, req, res)
 }
 
 func (api API) UpdateStore(req *Store) (*Store, error) {
 	res := new(Store)
 	res.api = &api
 
-	endpoint := fmt.Sprintf(store_path, req.ID)
+	endpoint := fmt.Sprintf(storePath, req.ID)
 	return res, api.Request("PATCH", endpoint, nil, req, res)
 }
 
@@ -127,7 +127,7 @@ func (api API) DeleteStore(id string) (bool, error) {
 	if err := validID(id); err != nil {
 		return false, err
 	}
-	endpoint := fmt.Sprintf(store_path, id)
+	endpoint := fmt.Sprintf(storePath, id)
 	return api.RequestOk("DELETE", endpoint)
 }
 
@@ -149,7 +149,7 @@ func (store Store) GetCustomers(params *ExtendedQueryParams) (*CustomerList, err
 	if store.HasError() {
 		return nil, fmt.Errorf("The store has an error, can't process request")
 	}
-	endpoint := fmt.Sprintf(customers_path, store.ID)
+	endpoint := fmt.Sprintf(customersPath, store.ID)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -166,10 +166,10 @@ func (store Store) GetCustomer(id string, params *BasicQueryParams) (*Customer, 
 	response := new(Customer)
 
 	if store.HasError() {
-		return nil, fmt.Errorf("The store has an error, can't process request")
+		return nil, fmt.Errorf("the store has an error, can't process request")
 	}
 
-	endpoint := fmt.Sprintf(customer_path, store.ID, id)
+	endpoint := fmt.Sprintf(customerPath, store.ID, id)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -183,7 +183,7 @@ func (store Store) CreateCustomer(req *Customer) (*Customer, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(customers_path, store.ID)
+	endpoint := fmt.Sprintf(customersPath, store.ID)
 	res := new(Customer)
 
 	return res, store.api.Request("POST", endpoint, nil, req, res)
@@ -194,7 +194,7 @@ func (store Store) UpdateCustomer(req *Customer) (*Customer, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(customer_path, store.ID, req.ID)
+	endpoint := fmt.Sprintf(customerPath, store.ID, req.ID)
 	res := new(Customer)
 
 	return res, store.api.Request("PATCH", endpoint, nil, req, res)
@@ -209,7 +209,7 @@ func (store Store) DeleteCustomer(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(customer_path, store.ID, id)
+	endpoint := fmt.Sprintf(customerPath, store.ID, id)
 	return store.api.RequestOk("DELETE", endpoint)
 }
 
@@ -252,7 +252,7 @@ func (store Store) GetCarts(params *ExtendedQueryParams) (*CartList, error) {
 	if store.HasError() {
 		return nil, fmt.Errorf("The store has an error, can't process request")
 	}
-	endpoint := fmt.Sprintf(carts_path, store.ID)
+	endpoint := fmt.Sprintf(cartsPath, store.ID)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -272,7 +272,7 @@ func (store Store) GetCart(id string, params *BasicQueryParams) (*Cart, error) {
 		return nil, fmt.Errorf("The store has an error, can't process request")
 	}
 
-	endpoint := fmt.Sprintf(cart_path, store.ID, id)
+	endpoint := fmt.Sprintf(cartPath, store.ID, id)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -286,7 +286,7 @@ func (store Store) CreateCart(req *Cart) (*Cart, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(carts_path, store.ID)
+	endpoint := fmt.Sprintf(cartsPath, store.ID)
 	res := new(Cart)
 
 	return res, store.api.Request("POST", endpoint, nil, req, res)
@@ -297,7 +297,7 @@ func (store Store) UpdateCart(req *Cart) (*Cart, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(cart_path, store.ID, req.ID)
+	endpoint := fmt.Sprintf(cartPath, store.ID, req.ID)
 	res := new(Cart)
 
 	return res, store.api.Request("PATCH", endpoint, nil, req, res)
@@ -312,7 +312,7 @@ func (store Store) DeleteCart(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(cart_path, store.ID, id)
+	endpoint := fmt.Sprintf(cartPath, store.ID, id)
 	return store.api.RequestOk("DELETE", endpoint)
 }
 
@@ -364,7 +364,7 @@ func (store Store) GetOrders(params *ExtendedQueryParams) (*OrderList, error) {
 	if store.HasError() {
 		return nil, fmt.Errorf("The store has an error, can't process request")
 	}
-	endpoint := fmt.Sprintf(carts_path, store.ID)
+	endpoint := fmt.Sprintf(cartsPath, store.ID)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -384,7 +384,7 @@ func (store Store) GetOrder(id string, params *BasicQueryParams) (*Order, error)
 		return nil, fmt.Errorf("The store has an error, can't process request")
 	}
 
-	endpoint := fmt.Sprintf(order_path, store.ID, id)
+	endpoint := fmt.Sprintf(orderPath, store.ID, id)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -398,7 +398,7 @@ func (store Store) CreateOrder(req *Order) (*Order, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(orders_path, store.ID)
+	endpoint := fmt.Sprintf(ordersPath, store.ID)
 	res := new(Order)
 
 	return res, store.api.Request("POST", endpoint, nil, req, res)
@@ -409,7 +409,7 @@ func (store Store) UpdateOrder(req *Order) (*Order, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(order_path, store.ID, req.ID)
+	endpoint := fmt.Sprintf(orderPath, store.ID, req.ID)
 	res := new(Order)
 
 	return res, store.api.Request("PATCH", endpoint, nil, req, res)
@@ -424,7 +424,7 @@ func (store Store) DeleteOrder(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(order_path, store.ID, id)
+	endpoint := fmt.Sprintf(orderPath, store.ID, id)
 	return store.api.RequestOk("DELETE", endpoint)
 }
 
@@ -478,7 +478,7 @@ func (store Store) GetProducts(params *ExtendedQueryParams) (*ProductList, error
 	if store.HasError() {
 		return nil, fmt.Errorf("The store has an error, can't process request")
 	}
-	endpoint := fmt.Sprintf(carts_path, store.ID)
+	endpoint := fmt.Sprintf(cartsPath, store.ID)
 	err := store.api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
 		return nil, err
@@ -500,7 +500,7 @@ func (store Store) GetProduct(id string, params *BasicQueryParams) (*Product, er
 	res.api = store.api
 	res.StoreID = store.ID
 
-	endpoint := fmt.Sprintf(cart_path, store.ID, id)
+	endpoint := fmt.Sprintf(cartPath, store.ID, id)
 	err := store.api.Request("GET", endpoint, params, nil, res)
 	if err != nil {
 		return nil, err
@@ -514,7 +514,7 @@ func (store Store) CreateProduct(req *Product) (*Product, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(products_path, store.ID)
+	endpoint := fmt.Sprintf(productsPath, store.ID)
 	res := new(Product)
 	res.api = store.api
 	res.StoreID = store.ID
@@ -527,7 +527,7 @@ func (store Store) UpdateProduct(req *Product) (*Product, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(product_path, store.ID, req.ID)
+	endpoint := fmt.Sprintf(productPath, store.ID, req.ID)
 	res := new(Product)
 	res.api = store.api
 	res.StoreID = store.ID
@@ -540,7 +540,7 @@ func (store Store) DeleteProduct(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(product_path, store.ID, id)
+	endpoint := fmt.Sprintf(productPath, store.ID, id)
 	return store.api.RequestOk("DELETE", endpoint)
 }
 
@@ -582,7 +582,7 @@ func (product Product) CreateVariant(req *Variant) (*Variant, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(variants_path, product.StoreID, product.ID)
+	endpoint := fmt.Sprintf(variantsPath, product.StoreID, product.ID)
 	res := new(Variant)
 	res.api = product.api
 
@@ -594,7 +594,7 @@ func (product Product) UpdateVariant(req *Variant) (*Variant, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(variant_path, product.StoreID, product.ID, req.ID)
+	endpoint := fmt.Sprintf(variantPath, product.StoreID, product.ID, req.ID)
 	res := new(Variant)
 	res.api = product.api
 
@@ -606,6 +606,6 @@ func (product Product) DeleteVariant(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(variant_path, product.StoreID, product.ID, id)
+	endpoint := fmt.Sprintf(variantPath, product.StoreID, product.ID, id)
 	return product.api.RequestOk("DELETE", endpoint)
 }

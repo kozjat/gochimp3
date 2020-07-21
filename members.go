@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	members_path       = "/lists/%s/members"
-	single_member_path = members_path + "/%s"
+	membersPath      = "/lists/%s/members"
+	singleMemberPath = membersPath + "/%s"
 
-	member_activity_path = single_member_path + "/activity"
-	member_goals_path    = single_member_path + "/goals"
+	memberActivityPath = singleMemberPath + "/activity"
+	memberGoalsPath    = singleMemberPath + "/goals"
 
-	member_notes_path       = single_member_path + "/notes"
-	single_member_note_path = member_notes_path + "/%s"
+	memberNotesPath      = singleMemberPath + "/notes"
+	singleMemberNotePath = memberNotesPath + "/%s"
 )
 
 type ListOfMembers struct {
@@ -21,6 +21,11 @@ type ListOfMembers struct {
 
 	ListID  string   `json:"list_id"`
 	Members []Member `json:"members"`
+}
+
+type Tag struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type MemberRequest struct {
@@ -35,7 +40,7 @@ type MemberRequest struct {
 	Location        *MemberLocation        `json:"location,omitempty"`
 	IPOpt           string                 `json:"ip_opt,omitempty"`
 	IPSignup        string                 `json:"ip_signup,omitempty"`
-  Tags            []string               `json:"tags,omitempty"`
+	Tags            []string               `json:"tags,omitempty"`
 	TimestampSignup string                 `json:"timestamp_signup,omitempty"`
 	TimestampOpt    string                 `json:"timestamp_opt,omitempty"`
 }
@@ -52,6 +57,7 @@ type Member struct {
 	LastChanged   string          `json:"last_changed"`
 	EmailClient   string          `json:"email_client"`
 	LastNote      MemberNoteShort `json:"last_note"`
+	Tags          []Tag           `json:"tags"`
 
 	api *API
 }
@@ -99,7 +105,7 @@ func (list ListResponse) GetMembers(params *InterestCategoriesQueryParams) (*Lis
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(members_path, list.ID)
+	endpoint := fmt.Sprintf(membersPath, list.ID)
 	response := new(ListOfMembers)
 
 	err := list.api.Request("GET", endpoint, params, nil, response)
@@ -119,7 +125,7 @@ func (list ListResponse) GetMember(id string, params *BasicQueryParams) (*Member
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleMemberPath, list.ID, id)
 	response := new(Member)
 	response.api = list.api
 
@@ -131,7 +137,7 @@ func (list ListResponse) CreateMember(body *MemberRequest) (*Member, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(members_path, list.ID)
+	endpoint := fmt.Sprintf(membersPath, list.ID)
 	response := new(Member)
 	response.api = list.api
 
@@ -143,7 +149,7 @@ func (list ListResponse) UpdateMember(id string, body *MemberRequest) (*Member, 
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleMemberPath, list.ID, id)
 	response := new(Member)
 	response.api = list.api
 
@@ -155,7 +161,7 @@ func (list ListResponse) AddOrUpdateMember(id string, body *MemberRequest) (*Mem
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleMemberPath, list.ID, id)
 	response := new(Member)
 	response.api = list.api
 
@@ -167,7 +173,7 @@ func (list ListResponse) DeleteMember(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleMemberPath, list.ID, id)
 	return list.api.RequestOk("DELETE", endpoint)
 }
 
@@ -198,7 +204,7 @@ func (mem Member) GetActivity(params *BasicQueryParams) (*ListOfMemberActivity, 
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(member_activity_path, mem.ListID, mem.ID)
+	endpoint := fmt.Sprintf(memberActivityPath, mem.ListID, mem.ID)
 	response := new(ListOfMemberActivity)
 
 	return response, mem.api.Request("GET", endpoint, params, nil, response)
@@ -228,7 +234,7 @@ func (mem Member) GetGoals(params *BasicQueryParams) (*ListOfMemberGoals, error)
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(member_goals_path, mem.ListID, mem.ID)
+	endpoint := fmt.Sprintf(memberGoalsPath, mem.ListID, mem.ID)
 	response := new(ListOfMemberGoals)
 
 	return response, mem.api.Request("GET", endpoint, params, nil, response)
@@ -263,7 +269,7 @@ func (mem Member) GetNotes(params *ExtendedQueryParams) (*ListOfMemberNotes, err
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(member_notes_path, mem.ListID, mem.ID)
+	endpoint := fmt.Sprintf(memberNotesPath, mem.ListID, mem.ID)
 	response := new(ListOfMemberNotes)
 
 	return response, mem.api.Request("GET", endpoint, params, nil, response)
@@ -274,7 +280,7 @@ func (mem Member) CreateNote(msg string) (*MemberNoteLong, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(member_notes_path, mem.ListID, mem.ID)
+	endpoint := fmt.Sprintf(memberNotesPath, mem.ListID, mem.ID)
 	response := new(MemberNoteLong)
 
 	body := struct{ Note string }{
@@ -289,7 +295,7 @@ func (mem Member) UpdateNote(id, msg string) (*MemberNoteLong, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_note_path, mem.ListID, mem.ID, id)
+	endpoint := fmt.Sprintf(singleMemberNotePath, mem.ListID, mem.ID, id)
 	response := new(MemberNoteLong)
 
 	body := struct{ Note string }{
@@ -304,7 +310,7 @@ func (mem Member) GetNote(id string, params *BasicQueryParams) (*MemberNoteLong,
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_note_path, mem.ListID, mem.ID, id)
+	endpoint := fmt.Sprintf(singleMemberNotePath, mem.ListID, mem.ID, id)
 	response := new(MemberNoteLong)
 
 	return response, mem.api.Request("GET", endpoint, params, nil, response)
@@ -315,6 +321,6 @@ func (mem Member) DeleteNote(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(single_member_note_path, mem.ListID, mem.ID, id)
+	endpoint := fmt.Sprintf(singleMemberNotePath, mem.ListID, mem.ID, id)
 	return mem.api.RequestOk("DELETE", endpoint)
 }

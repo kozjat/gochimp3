@@ -6,21 +6,21 @@ import (
 )
 
 const (
-	automations_path       = "/automations"
-	single_automation_path = automations_path + "/%s"
-	pause_all_emails_path  = single_automation_path + "/actions/pause-all-emails"
-	start_all_emails_path  = single_automation_path + "/actions/start-all-emails"
+	automationsPath      = "/automations"
+	singleAutomationPath = automationsPath + "/%s"
+	pauseAllEmailsPath   = singleAutomationPath + "/actions/pause-all-emails"
+	startAllEmailsPath   = singleAutomationPath + "/actions/start-all-emails"
 
-	automation_email_path        = single_automation_path + "/emails"
-	single_automation_email_path = automation_email_path + "/%s"
+	automationEmailPath       = singleAutomationPath + "/emails"
+	singleAutomationEmailPath = automationEmailPath + "/%s"
 
-	pause_single_email_path = single_automation_email_path + "/actions/pause"
-	start_single_email_path = single_automation_email_path + "/actions/start"
+	pauseSingleEmailPath = singleAutomationEmailPath + "/actions/pause"
+	startSingleEmailPath = singleAutomationEmailPath + "/actions/start"
 
-	automation_queues_path       = single_automation_email_path + "/queue"
-	single_automation_queue_path = automation_queues_path + "/%s"
+	automationQueuesPath      = singleAutomationEmailPath + "/queue"
+	singleAutomationQueuePath = automationQueuesPath + "/%s"
 
-	removed_subscribers_automation_path = single_automation_path + "/removed-subscribers"
+	removedSubscribersAutomationPath = singleAutomationPath + "/removed-subscribers"
 )
 
 type ListOfAutomations struct {
@@ -128,7 +128,7 @@ func (auto Automation) CanMakeRequest() error {
 func (api API) GetAutomations(params *BasicQueryParams) (*ListOfAutomations, error) {
 	response := new(ListOfAutomations)
 
-	err := api.Request("GET", automations_path, params, nil, response)
+	err := api.Request("GET", automationsPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +142,7 @@ func (api API) GetAutomations(params *BasicQueryParams) (*ListOfAutomations, err
 
 // TODO query params?
 func (api API) GetAutomation(id string) (*Automation, error) {
-	endpoint := fmt.Sprintf(single_automation_path, id)
+	endpoint := fmt.Sprintf(singleAutomationPath, id)
 
 	response := new(Automation)
 	response.api = &api
@@ -162,7 +162,7 @@ func (auto Automation) PauseSendingAll() (bool, error) {
 }
 
 func (api API) PauseSendingAll(id string) (bool, error) {
-	endpoint := fmt.Sprintf(pause_all_emails_path, id)
+	endpoint := fmt.Sprintf(pauseAllEmailsPath, id)
 	return api.RequestOk("POST", endpoint)
 }
 
@@ -174,7 +174,7 @@ func (auto Automation) StartSendingAll() (bool, error) {
 }
 
 func (api API) StartSendingAll(id string) (bool, error) {
-	endpoint := fmt.Sprintf(start_all_emails_path, id)
+	endpoint := fmt.Sprintf(startAllEmailsPath, id)
 	return api.RequestOk("POST", endpoint)
 }
 
@@ -183,7 +183,7 @@ func (email AutomationEmail) PauseSending() (bool, error) {
 }
 
 func (api API) PauseSending(workflowID, emailID string) (bool, error) {
-	endpoint := fmt.Sprintf(pause_single_email_path, workflowID, emailID)
+	endpoint := fmt.Sprintf(pauseSingleEmailPath, workflowID, emailID)
 	return api.RequestOk("POST", endpoint)
 }
 
@@ -192,7 +192,7 @@ func (email AutomationEmail) StartSending() (bool, error) {
 }
 
 func (api API) StartSending(workflowID, emailID string) (bool, error) {
-	endpoint := fmt.Sprintf(start_single_email_path, workflowID, emailID)
+	endpoint := fmt.Sprintf(startSingleEmailPath, workflowID, emailID)
 	return api.RequestOk("POST", endpoint)
 }
 
@@ -258,7 +258,7 @@ func (auto Automation) GetEmails() (*ListOfEmails, error) {
 }
 
 func (api API) GetAutomationEmails(automationID string) (*ListOfEmails, error) {
-	endpoint := fmt.Sprintf(automation_email_path, automationID)
+	endpoint := fmt.Sprintf(automationEmailPath, automationID)
 	response := new(ListOfEmails)
 
 	for _, l := range response.Emails {
@@ -277,7 +277,7 @@ func (auto Automation) GetEmail(id string) (*AutomationEmail, error) {
 }
 
 func (api API) GetAutomationEmail(automationID, emailID string) (*AutomationEmail, error) {
-	endpoint := fmt.Sprintf(single_automation_email_path, automationID, emailID)
+	endpoint := fmt.Sprintf(singleAutomationEmailPath, automationID, emailID)
 	response := new(AutomationEmail)
 	response.api = &api
 
@@ -320,7 +320,7 @@ func (email AutomationEmail) GetQueues() (*ListOfAutomationQueues, error) {
 }
 
 func (api API) GetAutomationQueues(workflowID, emailID string) (*ListOfAutomationQueues, error) {
-	endpoint := fmt.Sprintf(automation_queues_path, workflowID, emailID)
+	endpoint := fmt.Sprintf(automationQueuesPath, workflowID, emailID)
 
 	response := new(ListOfAutomationQueues)
 	for _, l := range response.Queues {
@@ -339,7 +339,7 @@ func (email AutomationEmail) GetQueue(id string) (*AutomationQueue, error) {
 }
 
 func (api API) GetAutomationQueue(workflowID, emailID, subsID string) (*AutomationQueue, error) {
-	endpoint := fmt.Sprintf(single_automation_queue_path, workflowID, emailID, subsID)
+	endpoint := fmt.Sprintf(singleAutomationQueuePath, workflowID, emailID, subsID)
 
 	response := new(AutomationQueue)
 	response.api = &api
@@ -356,7 +356,7 @@ func (email AutomationEmail) CreateQueue(emailAddress string) (*AutomationQueue,
 }
 
 func (api API) CreateAutomationEmailQueue(workflowID, emailID, emailAddress string) (*AutomationQueue, error) {
-	endpoint := fmt.Sprintf(automation_queues_path, workflowID, emailID)
+	endpoint := fmt.Sprintf(automationQueuesPath, workflowID, emailID)
 	response := new(AutomationQueue)
 
 	body := &AutomationQueueRequest{
@@ -403,7 +403,7 @@ func (auto Automation) GetRemovedSubscribers() (*ListOfRemovedSubscribers, error
 }
 
 func (api API) GetAutomationRemovedSubscribers(workflowID string) (*ListOfRemovedSubscribers, error) {
-	endpoint := fmt.Sprintf(removed_subscribers_automation_path, workflowID)
+	endpoint := fmt.Sprintf(removedSubscribersAutomationPath, workflowID)
 
 	response := new(ListOfRemovedSubscribers)
 
@@ -419,7 +419,7 @@ func (auto Automation) CreateRemovedSubscribers(emailAddress string) (*RemovedSu
 }
 
 func (api API) CreateAutomationRemovedSubscribers(workflowID, emailAddress string) (*RemovedSubscriber, error) {
-	endpoint := fmt.Sprintf(removed_subscribers_automation_path, workflowID)
+	endpoint := fmt.Sprintf(removedSubscribersAutomationPath, workflowID)
 
 	response := new(RemovedSubscriber)
 	body := &RemovedSubscriberRequest{

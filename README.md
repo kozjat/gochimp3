@@ -1,5 +1,5 @@
-# gochimp3
-[![GoDoc][godoc-img]][godoc-url] [![Build Status][travis-img]][travis-url] [![Gitter chat][gitter-img]][gitter-url]
+# Mailchimp-go
+[![GoDoc][godoc-img]][godoc-url]
 
 ## Introduction
 Golang client for [MailChimp API 3.0](http://developer.mailchimp.com/documentation/mailchimp/).
@@ -8,7 +8,7 @@ Golang client for [MailChimp API 3.0](http://developer.mailchimp.com/documentati
 Install with `go get`:
 
 ```bash
-$ go get github.com/hanzoai/gochimp3
+$ go get github.com/kozjat/mailchimp-go
 ```
 
 ## Usage
@@ -19,12 +19,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hanzoai/gochimp3"
+	"github.com/kozjat/mailchimp-go"
 )
 
-const (
-	apiKey = "YOUR_API_KEY_HERE"
-)
+const apiKey = "YOUR_API_KEY_HERE"
 
 func main() {
 	client := gochimp3.New(apiKey)
@@ -53,13 +51,5 @@ func main() {
 }
 ```
 
-[godoc-img]:      https://godoc.org/github.com/hanzoai/gochimp3?status.svg
-[godoc-url]:      https://godoc.org/github.com/hanzoai/gochimp3
-[travis-img]:     https://img.shields.io/travis/hanzoai/gochimp3.svg
-[travis-url]:     https://travis-ci.org/hanzoai/gochimp3
-[gitter-img]:     https://badges.gitter.im/join-chat.svg
-[gitter-url]:     https://gitter.im/hanzoai/chat
-
-<!-- not used -->
-[coveralls-img]:    https://coveralls.io/repos/hanzoai/gochimp3/badge.svg?branch=master&service=github
-[coveralls-url]:    https://coveralls.io/github/hanzoai/gochimp3?branch=master
+[godoc-img]:      https://godoc.org/github.com/kozjat/mailchimp-go?status.svg
+[godoc-url]:      https://godoc.org/github.com/kozjat/mailchimp-go

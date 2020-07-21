@@ -1,7 +1,7 @@
 package gochimp3
 
 const (
-	search_members_path = "/search-members"
+	searchMembersPath = "/search-members"
 )
 
 type SearchMembersQueryParams struct {
@@ -34,7 +34,7 @@ func (list ListResponse) SearchMembers(params *SearchMembersQueryParams) (*Searc
 
 	params.listID = list.ID
 
-	err := list.api.Request("GET", search_members_path, params, nil, response)
+	err := list.api.Request("GET", searchMembersPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}

@@ -3,8 +3,8 @@ package gochimp3
 import "fmt"
 
 const (
-	segments_path       = "/lists/%s/segments"
-	single_segment_path = segments_path + "/%s"
+	segmentsPath      = "/lists/%s/segments"
+	singleSegmentPath = segmentsPath + "/%s"
 )
 
 type ListOfSegments struct {
@@ -23,7 +23,7 @@ type SegmentRequest struct {
 type Segment struct {
 	SegmentRequest
 
-	ID          string    `json:"id"`
+	ID          string `json:"id"`
 	MemberCount int    `json:"member_count"`
 	Type        string `json:"type"`
 	CreatedAt   string `json:"created_at"`
@@ -102,7 +102,7 @@ func (list ListResponse) GetSegments(params *SegmentQueryParams) (*ListOfSegment
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(segments_path, list.ID)
+	endpoint := fmt.Sprintf(segmentsPath, list.ID)
 	response := new(ListOfSegments)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -113,7 +113,7 @@ func (list ListResponse) GetSegment(id string, params *BasicQueryParams) (*Segme
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_segment_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleSegmentPath, list.ID, id)
 	response := new(Segment)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -124,7 +124,7 @@ func (list ListResponse) CreateSegment(body *SegmentRequest) (*Segment, error) {
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(segments_path, list.ID)
+	endpoint := fmt.Sprintf(segmentsPath, list.ID)
 	response := new(Segment)
 
 	return response, list.api.Request("POST", endpoint, nil, &body, response)
@@ -135,7 +135,7 @@ func (list ListResponse) UpdateSegment(id string, body *SegmentRequest) (*Segmen
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_segment_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleSegmentPath, list.ID, id)
 	response := new(Segment)
 
 	return response, list.api.Request("PATCH", endpoint, nil, &body, response)
@@ -150,7 +150,7 @@ func (list ListResponse) BatchModifySegment(id string, body *SegmentBatchRequest
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_segment_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleSegmentPath, list.ID, id)
 	response := new(SegmentBatchResponse)
 
 	return response, list.api.Request("POST", endpoint, nil, &body, response)
@@ -161,6 +161,6 @@ func (list ListResponse) DeleteSegment(id string) (bool, error) {
 		return false, err
 	}
 
-	endpoint := fmt.Sprintf(single_segment_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleSegmentPath, list.ID, id)
 	return list.api.RequestOk("DELETE", endpoint)
 }

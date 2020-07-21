@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	batches_path      = "/batches"
-	single_batch_path = batches_path + "/%s"
+	batchesPath     = "/batches"
+	singleBatchPath = batchesPath + "/%s"
 )
 
 func (api API) GetBatchOperations(params *ListQueryParams) (*ListOfBatchOperations, error) {
 	response := new(ListOfBatchOperations)
 
-	err := api.Request("GET", batches_path, params, nil, response)
+	err := api.Request("GET", batchesPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ type ListOfBatchOperations struct {
 }
 
 func (api API) GetBatchOperation(id string, params *BasicQueryParams) (*BatchOperationResponse, error) {
-	endpoint := fmt.Sprintf(single_batch_path, id)
+	endpoint := fmt.Sprintf(singleBatchPath, id)
 	response := new(BatchOperationResponse)
 	response.api = &api
 
@@ -41,7 +41,7 @@ func (api API) GetBatchOperation(id string, params *BasicQueryParams) (*BatchOpe
 func (api API) CreateBatchOperation(body *BatchOperationCreationRequest) (*BatchOperationResponse, error) {
 	response := new(BatchOperationResponse)
 	response.api = &api
-	return response, api.Request("POST", batches_path, nil, body, response)
+	return response, api.Request("POST", batchesPath, nil, body, response)
 }
 
 type BatchOperationCreationRequest struct {

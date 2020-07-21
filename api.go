@@ -66,10 +66,12 @@ func (api API) Request(method, path string, params QueryParams, body, response i
 	var err error
 	var data []byte
 	if body != nil {
+
 		data, err = json.Marshal(body)
 		if err != nil {
 			return err
 		}
+
 		bodyBytes = bytes.NewBuffer(data)
 		if api.Debug {
 			log.Printf("Adding body: %+v\n", body)
@@ -92,7 +94,7 @@ func (api API) Request(method, path string, params QueryParams, body, response i
 			}
 		}
 		req.URL.RawQuery = queryParams.Encode()
-		
+
 		if api.Debug {
 			log.Printf("Adding query params: %q\n", req.URL.Query())
 		}
@@ -120,8 +122,7 @@ func (api API) Request(method, path string, params QueryParams, body, response i
 	}
 
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-		// Do not unmarshall response is nil
-		if response == nil || reflect.ValueOf(response).IsNil() || len(data) == 0 {
+		if response == nil || len(data) == 0 {
 			return nil
 		}
 

@@ -6,28 +6,28 @@ import (
 )
 
 const (
-	lists_path       = "/lists"
-	single_list_path = lists_path + "/%s"
+	listsPath      = "/lists"
+	SingleListPath = listsPath + "/%s"
 
-	abuse_reports_path       = "/lists/%s/abuse_reports"
-	single_abuse_report_path = abuse_reports_path + "/%s"
+	abuseReportsPath      = "/lists/%s/abuse_reports"
+	singleAbuseReportPath = abuseReportsPath + "/%s"
 
-	activity_path = "/lists/%s/activity"
-	clients_path  = "/lists/%s/clients"
+	activityPath = "/lists/%s/activity"
+	clientsPath  = "/lists/%s/clients"
 
-	history_path        = "/lists/%s/growth-history"
-	single_history_path = history_path + "/%s"
+	historyPath       = "/lists/%s/growth-history"
+	singleHistoryPath = historyPath + "/%s"
 
-	interest_categories_path      = "/lists/%s/interest-categories"
-	single_interest_category_path = interest_categories_path + "/%s"
+	interestCategoriesPath     = "/lists/%s/interest-categories"
+	singleInterestCategoryPath = interestCategoriesPath + "/%s"
 
-	interests_path       = "/lists/%s/interest-categories/%s/interests"
-	single_interest_path = interests_path + "/%s"
+	interestsPath      = "/lists/%s/interest-categories/%s/interests"
+	singleInterestPath = interestsPath + "/%s"
 
-	lists_batch_subscribe_members = "/lists/%s"
+	listsBatchSubscribeMembers = "/lists/%s"
 
-	merge_fields_path = "/lists/%s/merge-fields"
-	merge_field_path  = merge_fields_path + "/%s"
+	mergeFieldsPath = "/lists/%s/merge-fields"
+	mergeFieldPath  = mergeFieldsPath + "/%s"
 )
 
 type ListQueryParams struct {
@@ -120,12 +120,12 @@ type CampaignDefaults struct {
 func (api API) GetLists(params *ListQueryParams) (*ListOfLists, error) {
 	response := new(ListOfLists)
 
-	err := api.Request("GET", lists_path, params, nil, response)
+	err := api.Request("GET", listsPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}
 
-	for i, _ := range response.Lists {
+	for i := range response.Lists {
 		response.Lists[i].api = &api
 	}
 
@@ -144,7 +144,7 @@ func (api API) NewListResponse(id string) *ListResponse {
 }
 
 func (api API) GetList(id string, params *BasicQueryParams) (*ListResponse, error) {
-	endpoint := fmt.Sprintf(single_list_path, id)
+	endpoint := fmt.Sprintf(SingleListPath, id)
 
 	response := new(ListResponse)
 	response.api = &api
@@ -155,11 +155,11 @@ func (api API) GetList(id string, params *BasicQueryParams) (*ListResponse, erro
 func (api API) CreateList(body *ListCreationRequest) (*ListResponse, error) {
 	response := new(ListResponse)
 	response.api = &api
-	return response, api.Request("POST", lists_path, nil, body, response)
+	return response, api.Request("POST", listsPath, nil, body, response)
 }
 
 func (api API) UpdateList(id string, body *ListCreationRequest) (*ListResponse, error) {
-	endpoint := fmt.Sprintf(single_list_path, id)
+	endpoint := fmt.Sprintf(SingleListPath, id)
 
 	response := new(ListResponse)
 	response.api = &api
@@ -168,7 +168,7 @@ func (api API) UpdateList(id string, body *ListCreationRequest) (*ListResponse, 
 }
 
 func (api API) DeleteList(id string) (bool, error) {
-	endpoint := fmt.Sprintf(single_list_path, id)
+	endpoint := fmt.Sprintf(SingleListPath, id)
 	return api.RequestOk("DELETE", endpoint)
 }
 
@@ -199,7 +199,7 @@ func (list ListResponse) GetAbuseReports(params *ExtendedQueryParams) (*ListOfAb
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(abuse_reports_path, list.ID)
+	endpoint := fmt.Sprintf(abuseReportsPath, list.ID)
 	response := new(ListOfAbuseReports)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -210,7 +210,7 @@ func (list ListResponse) GetAbuseReport(id string, params *ExtendedQueryParams) 
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_abuse_report_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleAbuseReportPath, list.ID, id)
 	response := new(AbuseReport)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -247,7 +247,7 @@ func (list ListResponse) GetActivity(params *BasicQueryParams) (*ListOfActivity,
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(activity_path, list.ID)
+	endpoint := fmt.Sprintf(activityPath, list.ID)
 	response := new(ListOfActivity)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -277,7 +277,7 @@ func (list ListResponse) GetClients(params *BasicQueryParams) (*ListOfClients, e
 		return nil, errors.New("No ID provided on list")
 	}
 
-	endpoint := fmt.Sprintf(clients_path, list.ID)
+	endpoint := fmt.Sprintf(clientsPath, list.ID)
 	response := new(ListOfClients)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -309,7 +309,7 @@ func (list ListResponse) GetGrowthHistory(params *ExtendedQueryParams) (*ListOfG
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(history_path, list.ID)
+	endpoint := fmt.Sprintf(historyPath, list.ID)
 	response := new(ListOfGrownHistory)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -320,7 +320,7 @@ func (list ListResponse) GetGrowthHistoryForMonth(month string, params *BasicQue
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_history_path, list.ID, month)
+	endpoint := fmt.Sprintf(singleHistoryPath, list.ID, month)
 	response := new(GrowthHistory)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -377,7 +377,7 @@ func (list ListResponse) GetInterestCategories(params *InterestCategoriesQueryPa
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(interest_categories_path, list.ID)
+	endpoint := fmt.Sprintf(interestCategoriesPath, list.ID)
 	response := new(ListOfInterestCategories)
 
 	err := list.api.Request("GET", endpoint, params, nil, response)
@@ -385,7 +385,7 @@ func (list ListResponse) GetInterestCategories(params *InterestCategoriesQueryPa
 		return nil, err
 	}
 
-	for i, _ := range response.Categories {
+	for i := range response.Categories {
 		response.Categories[i].api = list.api
 	}
 
@@ -397,7 +397,7 @@ func (list ListResponse) GetInterestCategory(id string, params *BasicQueryParams
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_interest_category_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleInterestCategoryPath, list.ID, id)
 	response := new(InterestCategory)
 	response.api = list.api
 
@@ -409,7 +409,7 @@ func (list ListResponse) CreateInterestCategory(body *InterestCategoryRequest) (
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(interest_categories_path, list.ID)
+	endpoint := fmt.Sprintf(interestCategoriesPath, list.ID)
 	response := new(InterestCategory)
 	response.api = list.api
 
@@ -421,7 +421,7 @@ func (list ListResponse) UpdateInterestCategory(id string, body *InterestCategor
 		return nil, errors.New("No ID provided on list")
 	}
 
-	endpoint := fmt.Sprintf(single_interest_category_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleInterestCategoryPath, list.ID, id)
 	response := new(InterestCategory)
 	response.api = list.api
 
@@ -433,7 +433,7 @@ func (list ListResponse) DeleteInterestCategory(id string) (bool, error) {
 		return false, errors.New("No ID provided on list")
 	}
 
-	endpoint := fmt.Sprintf(single_interest_category_path, list.ID, id)
+	endpoint := fmt.Sprintf(singleInterestCategoryPath, list.ID, id)
 	return list.api.RequestOk("DELETE", endpoint)
 }
 
@@ -468,7 +468,7 @@ func (list ListResponse) GetInterests(interestCategoryID string, params *Extende
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(interests_path, list.ID, interestCategoryID)
+	endpoint := fmt.Sprintf(interestsPath, list.ID, interestCategoryID)
 	response := new(ListOfInterests)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -479,7 +479,7 @@ func (list ListResponse) GetInterest(interestCategoryID, interestID string, para
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(single_interest_path, list.ID, interestCategoryID, interestID)
+	endpoint := fmt.Sprintf(singleInterestPath, list.ID, interestCategoryID, interestID)
 	response := new(Interest)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -490,7 +490,7 @@ func (interestCategory InterestCategory) CreateInterest(body *InterestRequest) (
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(interests_path, interestCategory.ListID, interestCategory.ID)
+	endpoint := fmt.Sprintf(interestsPath, interestCategory.ListID, interestCategory.ID)
 	response := new(Interest)
 
 	return response, interestCategory.api.Request("POST", endpoint, nil, body, response)
@@ -527,7 +527,7 @@ func (list ListResponse) BatchSubscribeMembers(body *BatchSubscribeMembersReques
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(lists_batch_subscribe_members, list.ID)
+	endpoint := fmt.Sprintf(listsBatchSubscribeMembers, list.ID)
 	response := new(BatchSubscribeMembersResponse)
 
 	return response, list.api.Request("POST", endpoint, nil, body, response)
@@ -616,7 +616,7 @@ func (list ListResponse) GetMergeFields(params *MergeFieldsParams) (*ListOfMerge
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(merge_fields_path, list.ID)
+	endpoint := fmt.Sprintf(mergeFieldsPath, list.ID)
 	response := new(ListOfMergeFields)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -627,7 +627,7 @@ func (list ListResponse) GetMergeField(params *MergeFieldParams) (*MergeField, e
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(merge_field_path, list.ID, params.MergeID)
+	endpoint := fmt.Sprintf(mergeFieldPath, list.ID, params.MergeID)
 	response := new(MergeField)
 
 	return response, list.api.Request("GET", endpoint, params, nil, response)
@@ -638,7 +638,7 @@ func (list ListResponse) CreateMergeField(body *MergeFieldRequest) (*MergeField,
 		return nil, err
 	}
 
-	endpoint := fmt.Sprintf(merge_fields_path, list.ID)
+	endpoint := fmt.Sprintf(mergeFieldsPath, list.ID)
 	response := new(MergeField)
 
 	return response, list.api.Request("POST", endpoint, nil, body, response)

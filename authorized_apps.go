@@ -3,8 +3,8 @@ package gochimp3
 import "fmt"
 
 const (
-	authorized_apps_path       = "/authorized-apps"
-	single_authorized_app_path = authorized_apps_path + "/%s"
+	authorizedAppsPath = "/authorized-apps"
+	authorizedAppPath  = authorizedAppsPath + "/%s"
 )
 
 type ListOfAuthorizedApps struct {
@@ -33,7 +33,7 @@ type AuthorizedAppCreateResponse struct {
 func (api API) GetAuthorizedApps(params *ExtendedQueryParams) (*ListOfAuthorizedApps, error) {
 	response := new(ListOfAuthorizedApps)
 
-	err := api.Request("GET", authorized_apps_path, params, nil, response)
+	err := api.Request("GET", authorizedAppsPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (api API) GetAuthorizedApps(params *ExtendedQueryParams) (*ListOfAuthorized
 func (api API) CreateAuthorizedApp(body *AuthorizedAppRequest) (*AuthorizedAppCreateResponse, error) {
 	response := new(AuthorizedAppCreateResponse)
 
-	err := api.Request("GET", authorized_apps_path, nil, body, response)
+	err := api.Request("GET", authorizedAppsPath, nil, body, response)
 	if err != nil {
 		return nil, err
 	}
@@ -52,9 +52,9 @@ func (api API) CreateAuthorizedApp(body *AuthorizedAppRequest) (*AuthorizedAppCr
 	return response, nil
 }
 
-func (api API) GetAuthroizedApp(id string, params *BasicQueryParams) (*AuthorizedApp, error) {
+func (api API) GetAuthorizedApp(id string, params *BasicQueryParams) (*AuthorizedApp, error) {
 	response := new(AuthorizedApp)
-	endpoint := fmt.Sprintf(single_authorized_app_path, id)
+	endpoint := fmt.Sprintf(authorizedAppPath, id)
 
 	err := api.Request("GET", endpoint, params, nil, response)
 	if err != nil {
