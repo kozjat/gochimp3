@@ -1,8 +1,8 @@
 package gochimp3
 
 const (
-	campaign_folders_path       = "/campaign-folders"
 	// single folder endpoint not implemented
+	campaignFoldersPath = "/campaign-folders"
 )
 
 type CampaignFolderQueryParams struct {
@@ -17,9 +17,9 @@ type ListOfCampaignFolders struct {
 type CampaignFolder struct {
 	withLinks
 
-	Name  string `json:"name"`
 	ID    string `json:"id"`
-	Count uint `json:"count"`
+	Count uint   `json:"count"`
+	Name  string `json:"name"`
 
 	api *API
 }
@@ -31,7 +31,7 @@ type CampaignFolderCreationRequest struct {
 func (api API) GetCampaignFolders(params *CampaignFolderQueryParams) (*ListOfCampaignFolders, error) {
 	response := new(ListOfCampaignFolders)
 
-	err := api.Request("GET", campaign_folders_path, params, nil, response)
+	err := api.Request("GET", campaignFoldersPath, params, nil, response)
 	if err != nil {
 		return nil, err
 	}
@@ -46,5 +46,5 @@ func (api API) GetCampaignFolders(params *CampaignFolderQueryParams) (*ListOfCam
 func (api API) CreateCampaignFolder(body *CampaignFolderCreationRequest) (*CampaignFolder, error) {
 	response := new(CampaignFolder)
 	response.api = &api
-	return response, api.Request("POST", campaign_folders_path, nil, body, response)
+	return response, api.Request("POST", campaignFoldersPath, nil, body, response)
 }
