@@ -1,5 +1,5 @@
 # Mailchimp-go
-[![GoDoc][godoc-img]][godoc-url]
+![Build][build-badge-url]
 
 ## Introduction
 Golang client for [MailChimp API 3.0](http://developer.mailchimp.com/documentation/mailchimp/).
@@ -53,3 +53,4 @@ func main() {
 
 [godoc-img]:      https://godoc.org/github.com/kozjat/mailchimp-go?status.svg
 [godoc-url]:      https://godoc.org/github.com/kozjat/mailchimp-go
+[build-badge-url]:      https://github.com/kozjat/mailchimp-go/workflows/build/badge.svg
