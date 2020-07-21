@@ -5,13 +5,13 @@ on:
       - master
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
 
-  runs-on: ubuntu-latest
-
-  steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-go@v1
-      name: 'Build'
-      with:
-        go-version: '1.14.3'
-    - run: go build .
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-go@v1
+        name: 'Build'
+        with:
+          go-version: '1.14.3'
+      - run: go build .
