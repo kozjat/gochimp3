@@ -14,6 +14,8 @@ const (
 
 	memberNotesPath      = singleMemberPath + "/notes"
 	singleMemberNotePath = memberNotesPath + "/%s"
+
+	memberTagsPath = "/lists/%s/members/%s/tags"
 )
 
 type ListOfMembers struct {
@@ -175,6 +177,27 @@ func (list ListResponse) DeleteMember(id string) (bool, error) {
 
 	endpoint := fmt.Sprintf(singleMemberPath, list.ID, id)
 	return list.api.RequestOk("DELETE", endpoint)
+}
+
+// ------------------------------------------------------------------------------------------------
+// Member tags
+// ------------------------------------------------------------------------------------------------
+type TagRequest struct {
+	Name   string `json:"name"`
+	Status string `json:"status"`
+}
+
+func (list ListResponse) AddTagsToMember(subscriberHash string, tags []TagRequest) (*Member, error) {
+	if err := list.CanMakeRequest(); err != nil {
+		return nil, err
+	}
+
+	endpoint := fmt.Sprintf(memberTagsPath, list.ID, subscriberHash)
+
+	body := make(map[string]interface{})
+	body["tags"] = tags
+
+	return nil, list.api.Request("POST", endpoint, nil, body, nil)
 }
 
 // ------------------------------------------------------------------------------------------------
